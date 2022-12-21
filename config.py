@@ -40,7 +40,7 @@ db_backup_dir_name=r"mongodb_backup_titan_%s" %(time.strftime("%Y%m%d%H%M"))
 # every n day to full backup
 full_backup_period=int(properties["full_backup_period"])
 # db backup to local   temp directory name
-db_one_cycle_backup_pre_name="mongodb_cycle_backup_test_titan_"
+db_one_cycle_backup_pre_name="mongodb_cycle_backup_realtag_"
 # compress file suffix  .zip  or   .tar.gz
 compress_suffix=".tar.gz"
 
