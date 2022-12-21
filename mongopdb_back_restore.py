@@ -243,7 +243,7 @@ def start_inc_backup(db_one_cycle_backup_name,last_circle_backup_time):
 			db_zip_to_backup_path=db_inc_backup_path
 			db_backup_zip_name=db_one_cycle_backup_name+"/"+db_inc_backup_name+config.compress_suffix			
 			db_backup_zip_path=db_backup_root_path+"/"+db_backup_zip_name
-			zip_and_upload_oss(db_zip_to_backup_path,db_backup_zip_name,db_backup_zip_path)
+			upload_files(db_zip_to_backup_path,db_backup_zip_name,db_backup_zip_path)
 			
 		# upload full backup file and del last backup direactory
 		if upload_flag==1:
@@ -252,7 +252,7 @@ def start_inc_backup(db_one_cycle_backup_name,last_circle_backup_time):
 			db_zip_to_backup_path=db_full_backup_path
 			db_backup_zip_name=db_one_cycle_backup_name+"/full_backup"+config.compress_suffix		
 			db_backup_zip_path=db_backup_root_path+"/"+db_backup_zip_name
-			zip_and_upload_oss(db_zip_to_backup_path,db_backup_zip_name,db_backup_zip_path)
+			upload_files(db_zip_to_backup_path,db_backup_zip_name,db_backup_zip_path)
 			if last_circle_backup_time!=0:
 				#del local last circle's oplog inc files
 				last_cycle_backup_name=config.db_one_cycle_backup_pre_name+get_format_time(last_circle_backup_time)
@@ -267,7 +267,7 @@ def do_full_backup():
 	if config.is_upload_to_oss!=0:
 		db_backup_zip_name=config.db_backup_dir_name+config.compress_suffix;
 		db_backup_zip_path=config.db_backup_root_path+db_backup_zip_name;
-		zip_and_upload_oss(db_backup_dir,db_backup_zip_name,db_backup_zip_path)
+		upload_files(db_backup_dir,db_backup_zip_name,db_backup_zip_path)
 
 
 def restore_full_mongodb(db_host, db_port,db_user, db_passwd, db_name, db_restore_path,is_drop=False,mongo_shell_path=""):
@@ -320,7 +320,8 @@ if __name__ == "__main__":
 			lock.release()
 	else:    # TODO test 查询/上传/下载 
     # 查询
-    
+        print "now is running backup db,exit!"
+
  '''
      file_name_list = get_files_list()
     logger.info(f"file_name_list = {file_name_list}")
