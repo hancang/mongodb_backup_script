@@ -18,9 +18,7 @@ BUCKET_NAME = "s3://de-rt-warehouse-prod/mongodb_backup"  # 存储桶名称
 path_s3="s3://de-rt-warehouse-prod/mongodb_backup/"
 todat_datatime=datetime.date.today()
 # s3 实例
-s3 = boto3.client('s3', region_name=CN_REGION_NAME,
-                  aws_access_key_id=CN_S3_AKI, aws_secret_access_key=CN_S3_SAK
-                  )
+s3 = boto3.client('s3', region_name=CN_REGION_NAME,aws_access_key_id=CN_S3_AKI, aws_secret_access_key=CN_S3_SAK)
  
 def upload_files(path_local, path_s3):
     """
@@ -259,7 +257,8 @@ def start_inc_backup(db_one_cycle_backup_name,last_circle_backup_time):
 				#del local last circle's oplog inc files
 				last_cycle_backup_name=config.db_one_cycle_backup_pre_name+get_format_time(last_circle_backup_time)
 				last_db_backup_path=db_backup_root_path+last_cycle_backup_name
-				fun.del_dir_or_file(last_db_backup_path)
+				inc_back_path_s3=path_s3+"/"+todat_datatime+"/mogodb_inc_back/"
+				upload_files(last_db_backup_path,inc_back_path_s3)
 				
 		
 def do_full_backup():
@@ -317,7 +316,7 @@ if __name__ == "__main__":
 			#time.sleep(10)
 			fun.print_cost_time("all done ", start_time)
 			
-		except Exception, e:
+		except Exception as e:
 			raise e
 		finally:
 			lock.release()

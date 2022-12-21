@@ -16,7 +16,7 @@ class LockCheck:
 			lock_file = open(self.lock_name, 'w')
 			try:
 				lock_file.write("")
-			except Exception, e:
+			except Exception as e :
 				raise e
 			finally:
 				lock_file.close()
