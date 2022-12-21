@@ -2,86 +2,8 @@ import zipfile
 import shutil
 import pymongo
 import re
-from oss.oss_api import *
 
 mongo_shell_path=""
-
-def get_oss_connect(endpoint,accessKeyId,accessKeySecret):
-	return OssAPI(endpoint, accessKeyId, accessKeySecret);
-
-### oss function
-
-def list_all_buckets(oss):
-	res = oss.list_all_my_buckets()
-	if 2 == (res.status / 100):
-		http_body_ = res.read()
-	bucket_list = GetServiceXml(http_body_)
-	for bucket in bucket_list.list():
-		print bucket
-	else:
-		print "ERROR"
-
-def get_remote_file_size(oss,bucket,remote_name):
-	length=0
-	res = oss.head_object(bucket, remote_name)
-	if 2 == (res.status / 100):
-		length = (int)(res.getheader('content-length'))
-	else:
-		print "can not get the length of object:", remote_name
-	return length	
-
-def download_file_to_local(oss,bucket,local_file,remote_name):
-	start_time = time.time()
-	headers = {}
-	res = oss.get_object_to_file(bucket, remote_name, local_file, headers)
-	return oss_check_res(res,"download_file_to_local",start_time)
-	
-def upload_file_to_bucket(oss,bucket,local_file,remote_name):
-	start_time = time.time()
-	res = oss.put_object_from_file(bucket,remote_name,local_file)
-	return oss_check_res(res,"upload_file_to_bucket",start_time)
-
-def upload_large_file_to_bucket(oss, bucket, local_file, remote_name, thread_num=5, max_part_num=100):
-	start_time = time.time()
-	res = oss.upload_large_file(bucket, remote_name, local_file, thread_num, max_part_num)
-	return oss_check_res(res,"upload_large_file_to_bucket",start_time)
-
-def large_multi_upload_file(oss, bucket, local_file, remote_name, thread_num=5, max_part_num=100):
-	start_time = time.time()
-	upload_id=""
-	res = oss.multi_upload_file(bucket, remote_name, local_file, upload_id, thread_num, max_part_num, None, None, False,True)
-	return oss_check_res(res,"large_multi_upload_file",start_time)
-	
-def del_bucket_file(oss,bucket,remote_name):
-	start_time = time.time()
-	res = oss.delete_object(bucket,remote_name)
-	return oss_check_res(res,"del_bucket_file",start_time)
-		
-def list_bucket_files(oss,bucket,prefix=None):
-	if prefix:
-		res= oss.list_bucket(bucket,prefix)
-	else:
-		res= oss.list_bucket(bucket)
-	if 2 == (res.status / 100):
-		data_ = res.read()
-	h = GetBucketXml(data_)
-	(file_list, common_list) = h.list()
-	for each in file_list:
-		print each
-	return file_list
-
-# oss check result:  0:success  1:fail
-def oss_check_res(res, msg, begin_time):
-	end_time = time.time()
-	cost = "%.2f" % (end_time - begin_time)
-	request_id = res.getheader('x-oss-request-id')
-	if (res.status / 100) == 2:
-		print "%s OK, cost:%s s ,request_id:%s" % (msg, cost, request_id)
-		return 0
-	else:
-		print "%s FAIL, cost:%s s, ret:%s,request_id:%s" % ( msg, cost, res.status, request_id)
-		return 1		
-
 		
 ### mongodb function
 
