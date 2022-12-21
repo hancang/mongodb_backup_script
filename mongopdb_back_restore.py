@@ -7,19 +7,18 @@ import config
 import json
 import lock_check 
 
-BUCKET_NAME = "s3://de-rt-warehouse-prod/mongodb_backup"  # 存储桶名称
- 
+
 # aws_access_key_id和aws_secret_access_key
 CN_S3_AKI = ''
 CN_S3_SAK = ''
- 
 CN_REGION_NAME = 'ap-southeast-1'  # 区域
+BUCKET_NAME = "s3://de-rt-warehouse-prod/mongodb_backup"  # 存储桶名称
+path_s3="s3://de-rt-warehouse-prod/mongodb_backup/"
  
 # s3 实例
 s3 = boto3.client('s3', region_name=CN_REGION_NAME,
                   aws_access_key_id=CN_S3_AKI, aws_secret_access_key=CN_S3_SAK
                   )
- 
  
 def upload_files(path_local, path_s3):
     """
@@ -243,7 +242,8 @@ def start_inc_backup(db_one_cycle_backup_name,last_circle_backup_time):
 			db_zip_to_backup_path=db_inc_backup_path
 			db_backup_zip_name=db_one_cycle_backup_name+"/"+db_inc_backup_name+config.compress_suffix			
 			db_backup_zip_path=db_backup_root_path+"/"+db_backup_zip_name
-			upload_files(db_zip_to_backup_path,db_backup_zip_name,db_backup_zip_path)
+            inc_back_path_s3=
+			upload_files(db_backup_zip_path,inc_back_path_s3)
 			
 		# upload full backup file and del last backup direactory
 		if upload_flag==1:
@@ -267,7 +267,8 @@ def do_full_backup():
 	if config.is_upload_to_oss!=0:
 		db_backup_zip_name=config.db_backup_dir_name+config.compress_suffix;
 		db_backup_zip_path=config.db_backup_root_path+db_backup_zip_name;
-		upload_files(db_backup_dir,db_backup_zip_name,db_backup_zip_path)
+        full_back_path_s3=
+		upload_files(db_backup_zip_path,full_back_path_s3)
 
 
 def restore_full_mongodb(db_host, db_port,db_user, db_passwd, db_name, db_restore_path,is_drop=False,mongo_shell_path=""):
