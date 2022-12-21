@@ -15,7 +15,7 @@ class Properties:
 					p_key=strs[0].strip()
 					p_value=strs[1].strip()
 					properties[p_key] = p_value
-		except Exception, e:
+		except Exception as e:
 			raise e
 		finally:
 			pro_file.close()
