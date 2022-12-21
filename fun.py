@@ -2,6 +2,9 @@ import zipfile
 import shutil
 import pymongo
 import re
+import time
+import os
+import sys
 
 mongo_shell_path=""
 		
@@ -11,16 +14,16 @@ mongo_shell_path=""
 def print_cost_time(msg, begin_time):
 	end_time = time.time()
 	cost = "%.2f" % (end_time - begin_time)
-	print " %s cost:%s s" % (msg, cost)
+	print(" %s cost:%s s" % (msg, cost))
 
 # del file or direactory
 def del_dir_or_file(filepath):
 	if os.path.isfile(filepath):
 		os.remove(filepath)
-		print filepath+" removed!"
+		print(filepath+" removed!")
 	elif os.path.isdir(filepath):  
 		shutil.rmtree(filepath,True)
-		print "direactory "+filepath+" removed!"  
+		print("direactory "+filepath+" removed!" )
 """	
 # compress direactory to zip
 def zip_files(path,zipfilename):
@@ -40,6 +43,7 @@ def zip_files(path,zipfilename):
 		zipfp.close()
 	print_cost_time("zip files", start_time)
 """		
+
 # compress direactory to zip
 def zip_files(dirPath, zipFilePath=None, includeDirInZip=True):
 	start_time = time.time();
@@ -62,14 +66,9 @@ def zip_files(dirPath, zipFilePath=None, includeDirInZip=True):
 			filePath=os.path.join(archiveDirPath,fileName);
 			outFile.write(filePath, trimPath(filePath));
         #Make sure we get empty directories as well
-        if not fileNames and not dirNames:
-            zipInfo = zipfile.ZipInfo(trimPath(archiveDirPath) + "/")
-            #some web sites suggest doing
-            #zipInfo.external_attr = 16
-            #or
-            #zipInfo.external_attr = 48
-            #Here to allow for inserting an empty directory.  Still TBD/TODO.
-            outFile.writestr(zipInfo, "");
+		if not fileNames and not dirNames:
+			zipInfo = zipfile.ZipInfo(trimPath(archiveDirPath) + "/")
+	outFile.writestr(zipInfo, "");
 	outFile.close()
 	print_cost_time("zip files", start_time)	
 
@@ -177,7 +176,7 @@ def is_file_not_empty(file_path):
 	
 def move_file(old_file_path,new_file_path):
 	shutil.move(old_file_path,new_file_path)
-	print "move "+old_file_path+" to "+new_file_path
+	print("move "+old_file_path+" to "+new_file_path)
 	
 def make_direactory(file_path):
 	if os.path.exists(file_path):
