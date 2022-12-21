@@ -296,12 +296,33 @@ def restore_oplog_mongodb(db_host, db_port,db_user, db_passwd, db_restore_path,m
 		os.system(cmd)
 	fun.print_cost_time("restore oplog", start_time)
 	
-    
 if __name__ == "__main__":
-    pass
-    # TODO test 查询/上传/下载 
+	lock=lock_check.LockCheck();
+	is_lock=lock.is_lock()
+	if not is_lock:
+		try:
+			lock.lock();
+			start_time = time.time()
+			print("begin to dump mongodb database ...");
+			
+			is_inc_backup=config.is_inc_backup
+			fun.mongo_shell_path=config.mongo_shell_path
+			if is_inc_backup==1:
+				do_inc_backup()
+			else:
+				do_full_backup()
+			#time.sleep(10)
+			fun.print_cost_time("all done ", start_time)
+			
+		except Exception, e:
+			raise e
+		finally:
+			lock.release()
+	else:    # TODO test 查询/上传/下载 
     # 查询
-    file_name_list = get_files_list()
+    
+ '''
+     file_name_list = get_files_list()
     logger.info(f"file_name_list = {file_name_list}")
  
     
@@ -313,3 +334,4 @@ if __name__ == "__main__":
     # path_s3 = './rootkey.csv'
     # path_local = ''    #自定义下载到本地的位置
     # download_zip(path_s3, path_local)
+ '''
