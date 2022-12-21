@@ -7,7 +7,7 @@ import datetime
 import config
 import json
 import lock_check
-import logger
+from loguru import logger
 
 
 # aws_access_key_id和aws_secret_access_key
