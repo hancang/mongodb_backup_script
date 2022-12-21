@@ -98,7 +98,7 @@ if __name__ == "__main__":
 	db_inc_backup_path=oplog_backup(restore_local_temp_path)
 	#time.sleep(15)
 	#db_inc_backup_path="H:\\pythoncode\\temp\\oplog_temp\\oplog_backup\\oplog_20151224194545"
-	print db_inc_backup_path
+	print(db_inc_backup_path)
 	if db_inc_backup_path:
 		restore_oplog_mongodb(target_db_host, target_db_port,target_db_user, target_db_passwd, db_inc_backup_path,mongo_shell_path)
 			
