@@ -6,8 +6,8 @@ from loguru import logger
 BUCKET_NAME = "mongodb_backup"  # 存储桶名称
  
 # aws_access_key_id和aws_secret_access_key
-CN_S3_AKI = 'AKIASPOBD3U7NR3J7N5C'
-CN_S3_SAK = 'hCG8ubYVRJtdo/fLPZH/y9LEohT+niI88sC/5inK'
+CN_S3_AKI = ''
+CN_S3_SAK = ''
  
 CN_REGION_NAME = 'ap-southeast-1'  # 区域
  
