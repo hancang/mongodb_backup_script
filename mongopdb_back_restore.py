@@ -3,9 +3,11 @@ import boto3
 from loguru import logge
 import fun
 import time
+import datetime
 import config
 import json
-import lock_check 
+import lock_check
+import logger
 
 
 # aws_access_key_id和aws_secret_access_key
@@ -14,7 +16,7 @@ CN_S3_SAK = ''
 CN_REGION_NAME = 'ap-southeast-1'  # 区域
 BUCKET_NAME = "s3://de-rt-warehouse-prod/mongodb_backup"  # 存储桶名称
 path_s3="s3://de-rt-warehouse-prod/mongodb_backup/"
- 
+todat_datatime=datetime.date.today()
 # s3 实例
 s3 = boto3.client('s3', region_name=CN_REGION_NAME,
                   aws_access_key_id=CN_S3_AKI, aws_secret_access_key=CN_S3_SAK
@@ -242,7 +244,7 @@ def start_inc_backup(db_one_cycle_backup_name,last_circle_backup_time):
 			db_zip_to_backup_path=db_inc_backup_path
 			db_backup_zip_name=db_one_cycle_backup_name+"/"+db_inc_backup_name+config.compress_suffix			
 			db_backup_zip_path=db_backup_root_path+"/"+db_backup_zip_name
-            inc_back_path_s3=
+			inc_back_path_s3=path_s3+"/"+todat_datatime+"/mogodb_inc_back/"
 			upload_files(db_backup_zip_path,inc_back_path_s3)
 			
 		# upload full backup file and del last backup direactory
@@ -267,7 +269,7 @@ def do_full_backup():
 	if config.is_upload_to_oss!=0:
 		db_backup_zip_name=config.db_backup_dir_name+config.compress_suffix;
 		db_backup_zip_path=config.db_backup_root_path+db_backup_zip_name;
-        full_back_path_s3=
+		full_back_path_s3=path_s3+"/"+todat_datatime+"/mogodb_inc_back/"
 		upload_files(db_backup_zip_path,full_back_path_s3)
 
 
@@ -321,7 +323,7 @@ if __name__ == "__main__":
 			lock.release()
 	else:    # TODO test 查询/上传/下载 
     # 查询
-        print "now is running backup db,exit!"
+		print("now is running backup db,exit!")
 
  '''
      file_name_list = get_files_list()
