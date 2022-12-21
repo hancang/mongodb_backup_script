@@ -3,7 +3,7 @@ import boto3
 from loguru import logger
  
  
-BUCKET_NAME = "mongodb_backup"  # 存储桶名称
+BUCKET_NAME = "s3://de-rt-warehouse-prod/mongodb_backup"  # 存储桶名称
  
 # aws_access_key_id和aws_secret_access_key
 CN_S3_AKI = ''
