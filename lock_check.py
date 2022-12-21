@@ -12,7 +12,7 @@ class LockCheck:
 	
 	def lock(self):
 		if not self.is_lock():
-			print "lock.."
+			print("lock..")
 			lock_file = open(self.lock_name, 'w')
 			try:
 				lock_file.write("")
@@ -23,5 +23,5 @@ class LockCheck:
 				
 	def release(self):
 		if self.is_lock():
-			print "release lock.."
+			print("release lock..")
 			os.remove(self.lock_name)
