@@ -8,32 +8,32 @@ import zipfile
 ### config
 
 ## oss 
-endpoint="oss.aliyuncs.com"
+endpoint="https://s3.ap-southeast-1.amazonaws.com"
 accessKeyId="xxx"
 accessKeySecret="xxx"
-bucket="db-backup"
+bucket="s3://de-rt-warehouse-prod/mongodb_backup"
 # oss multi upload thread num
 upload_thread_num=5
 
 ## mongodb config
 db_host="127.0.0.1"
-db_port=27017
+db_port=26016
 db_user="test"
 db_passwd="test" 
-db_name="titan_test"
+db_name="test"
 
 #  
 #last_full_backup_file_name_on_oss="mongodb_backup_titan_201512221438.tar.gz"
 
 # recent circle full backup direactory , the oss file name is  last_circle_backup_dir_name+last_full_backup_file_suffix
-last_circle_backup_dir_name="mongodb_backup_titan_201512221438"
+last_circle_backup_dir_name="mongodb_backup_reatltag_"
 
 last_full_backup_file_suffix=".tar.gz"
 
-restore_local_temp_path="/alidata1/dev/hanxuetong/temp_restore/"
+restore_local_temp_path="/data/mongodb_restore"
 
 # if mongo_shell not in PATH , need the mongo shell absolute path
-mongo_shell_path="/alidata1/dev/hanxuetong/mongodb/mongodb-linux-x86_64-3.0.6/bin/"
+mongo_shell_path=""
 
 # backup file has download to local ? if True,will not download backup files from oss
 has_download_to_local=True
@@ -99,7 +99,31 @@ def tar_uncompres_files(unZipSrc,targeDir):
 	os.system("tar -C %s -zxvf %s "
 		%(targeDir,unZipSrc))
 	fun.print_cost_time("untar files", start_time)	
-				
+
+
+def download_backup_to_local(path_s3, path_local):
+    """
+    下载
+    :param path_s3:
+    :param path_local:
+    :return:
+    """
+    retry = 0
+    while retry < 3:  # 下载异常尝试3次
+        logger.info(f'Start downloading files. | path_s3: {path_s3} | path_local: {path_local}')
+        try:
+            s3.download_file(BUCKET_NAME, path_s3, path_local)
+            file_size = os.path.getsize(path_local)
+            logger.info(f'Downloading completed. | size: {round(file_size / 1048576, 2)} MB')
+            break  # 下载完成后退出重试
+        except Exception as e:
+            logger.error(f'Download zip failed. | Exception: {e}')
+            retry += 1
+ 
+    if retry >= 3:
+        logger.error(f'Download zip failed after max retry.')
+
+'''
 def download_backup_to_local():
 	oss=fun.get_oss_connect(endpoint, accessKeyId, accessKeySecret);
 	last_full_backup_file_name_on_oss=last_circle_backup_dir_name+last_full_backup_file_suffix
@@ -110,7 +134,7 @@ def download_backup_to_local():
 def restore_to_mongodb(full_restore_path):
 	#full_restore_path=restore_path+"/full_backup"
 	restore_full_mongodb(db_host, db_port,db_user, db_passwd, db_name, full_restore_path+"/"+db_name,is_drop_old_restore)
-
+'''
 	
 if __name__ == "__main__":
 	start_time = time.time()

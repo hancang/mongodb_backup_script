@@ -2,29 +2,30 @@
 import fun
 import time
 import os
-from oss.oss_util import *
+import boto3
+from loguru import logger
 import zipfile
 
 ### config
 
-## oss 
-endpoint="oss.aliyuncs.com"
+## aws s3 
+endpoint="https://s3.ap-southeast-1.amazonaws.com"
 accessKeyId="xxxx"
 accessKeySecret="xxxx"
-bucket="db-backup"
+bucket="s3://de-rt-warehouse-prod/mongodb_backup"
 # oss multi upload thread num
 upload_thread_num=5
 
 ## mongodb config
 db_host="localhost"
-db_port=27017
+db_port=26016
 db_user="tests"
 db_passwd="tests" 
-db_name="titan_test"
+db_name="test"
 
 #  recent circle backup direactory on oss
-last_circle_backup_dir_name="mongodb_cycle_backup_test_titan_20151221113136"
-restore_local_temp_path="H:\\pythoncode\\temp\\restore\\"
+last_circle_backup_dir_name="mongodb_cycle_backup_realtag"
+restore_local_temp_path="/data/mongodb_backup"
 
 # if mongo_shell not in PATH , need the mongo shell absolute path
 mongo_shell_path=""
