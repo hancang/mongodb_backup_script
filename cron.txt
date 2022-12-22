@@ -1,5 +1,0 @@
-crontab -l
-crontab -e
-
-
-5 18 * * * python  /data/mongodb_backup/python_code/start.py >> /home/dev/hanxuetong/temp/py.log 2>&1
